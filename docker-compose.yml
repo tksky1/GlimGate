@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: glimgate-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: glimgate
+      MYSQL_USER: glimgate
+      MYSQL_PASSWORD: glimgate123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - glimgate-network
+
+  # Redis缓存（可选）
+  redis:
+    image: redis:7-alpine
+    container_name: glimgate-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - glimgate-network
+
+  # GlimGate应用
+  app:
+    build: .
+    container_name: glimgate-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      - GIN_MODE=release
+    volumes:
+      - ./config:/root/config
+    networks:
+      - glimgate-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  glimgate-network:
+    driver: bridge

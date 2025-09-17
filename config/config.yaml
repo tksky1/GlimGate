@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  mode: debug # debug, release, test
+
+database:
+  host: localhost
+  port: 3306
+  username: root
+  password: password
+  dbname: glimgate
+  charset: utf8mb4
+  parse_time: true
+  loc: Local
+
+jwt:
+  secret: glimgate-jwt-secret-key-2024
+  expire_hours: 24
+
+cors:
+  allow_origins:
+    - "*"
+  allow_methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allow_headers:
+    - "*"
