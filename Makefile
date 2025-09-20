@@ -40,6 +40,18 @@ lint:
 # 初始化项目
 init: deps swagger
 
+build-compose:
+	docker compose build
+
+up:
+	docker compose up -d
+
+deploy:  swagger build-compose up
+	@echo "部署完成"
+
+down:
+	docker compose down
+
 # 帮助信息
 help:
 	@echo "可用的命令:"

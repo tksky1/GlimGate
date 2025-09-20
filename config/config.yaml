@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 20401
   mode: debug # debug, release, test
 
 database:
-  host: localhost
+  host: glimgate-mysql
   port: 3306
   username: root
-  password: password
+  password: root123
   dbname: glimgate
   charset: utf8mb4
   parse_time: true

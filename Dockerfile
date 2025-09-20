@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23 AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -6,11 +6,11 @@ WORKDIR /app
 # 复制go mod文件
 COPY go.mod go.sum ./
 
-# 下载依赖
-RUN go mod download
-
 # 复制源代码
 COPY . .
+
+# 下载依赖
+RUN go mod tidy
 
 # 构建应用
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o glimgate main.go
@@ -31,7 +31,7 @@ COPY --from=builder /app/glimgate .
 COPY --from=builder /app/config ./config
 
 # 暴露端口
-EXPOSE 8080
+EXPOSE 20401
 
 # 运行应用
 CMD ["./glimgate"]

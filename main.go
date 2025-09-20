@@ -5,6 +5,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/tksky1/glimgate/docs" // 添加这行
 	"github.com/tksky1/glimgate/internal/middleware"
 	"github.com/tksky1/glimgate/internal/router"
 	"github.com/tksky1/glimgate/pkg/config"
@@ -23,7 +26,6 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
-// @host localhost:8080
 // @BasePath /
 
 // @securityDefinitions.apikey ApiKeyAuth
@@ -50,15 +52,17 @@ func main() {
 
 	// 添加中间件
 	r.Use(middleware.CORSMiddleware())
+	r.SetTrustedProxies(nil)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 设置路由
 	router.SetupRoutes(r)
 
 	// 启动服务器
-	addr := fmt.Sprintf(":%d", config.AppConfig.Server.Port)
+	addr := fmt.Sprintf("0.0.0.0:%d", config.AppConfig.Server.Port)
 	log.Printf("服务器启动在端口 %d", config.AppConfig.Server.Port)
 	log.Printf("API文档地址: http://localhost%s/swagger/index.html", addr)
-	
+
 	if err := r.Run(addr); err != nil {
 		log.Fatalf("启动服务器失败: %v", err)
 	}

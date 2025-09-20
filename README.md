@@ -108,8 +108,8 @@ go run main.go
 ```
 
 6. **访问服务**
-- API服务: http://localhost:8080
-- API文档: http://localhost:8080/swagger/index.html
+- API服务: http://localhost:20401
+- API文档: http://localhost:20401/swagger/index.html
 
 ## 配置说明
 
@@ -117,7 +117,7 @@ go run main.go
 
 ```yaml
 server:
-  port: 8080              # 服务端口
+  port: 20401              # 服务端口
   mode: debug             # 运行模式: debug, release, test
 
 database:
@@ -298,7 +298,7 @@ CMD ["./glimgate"]
 ```yaml
 server:
   mode: release
-  port: 8080
+  port: 20401
 
 jwt:
   secret: "your-production-secret-key"
@@ -324,7 +324,7 @@ server {
     server_name your-domain.com;
     
     location / {
-        proxy_pass http://localhost:8080;
+        proxy_pass http://localhost:20401;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }

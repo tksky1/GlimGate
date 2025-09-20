@@ -1,0 +1,1779 @@
+basePath: /
+definitions:
+  model.Direction:
+    properties:
+      created_at:
+        type: string
+      description:
+        example: 负责前端页面开发和用户交互
+        type: string
+      id:
+        type: integer
+      managers:
+        description: 关联关系
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      name:
+        example: 前端开发
+        type: string
+      problems:
+        items:
+          $ref: '#/definitions/model.Problem'
+        type: array
+      updated_at:
+        type: string
+    required:
+    - name
+    type: object
+  model.Problem:
+    properties:
+      created_at:
+        type: string
+      description:
+        example: 使用HTML、CSS、JavaScript实现一个基本的计算器功能
+        type: string
+      direction:
+        allOf:
+        - $ref: '#/definitions/model.Direction'
+        description: 关联关系
+      direction_id:
+        example: 1
+        type: integer
+      id:
+        type: integer
+      submission_points:
+        items:
+          $ref: '#/definitions/model.SubmissionPoint'
+        type: array
+      submissions:
+        items:
+          $ref: '#/definitions/model.Submission'
+        type: array
+      title:
+        example: 实现一个简单的计算器
+        type: string
+      updated_at:
+        type: string
+    required:
+    - description
+    - direction_id
+    - title
+    type: object
+  model.Score:
+    properties:
+      comment:
+        example: 代码实现良好，但缺少注释
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      reviewer:
+        $ref: '#/definitions/model.User'
+      reviewer_id:
+        example: 2
+        type: integer
+      score:
+        example: 85
+        minimum: 0
+        type: integer
+      submission:
+        $ref: '#/definitions/model.Submission'
+      submission_id:
+        example: 1
+        type: integer
+      updated_at:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/model.User'
+        description: 关联关系
+      user_id:
+        example: 1
+        type: integer
+    required:
+    - reviewer_id
+    - score
+    - submission_id
+    - user_id
+    type: object
+  model.Submission:
+    properties:
+      content:
+        example: https://github.com/user/project
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      problem:
+        $ref: '#/definitions/model.Problem'
+      problem_id:
+        example: 1
+        type: integer
+      scores:
+        items:
+          $ref: '#/definitions/model.Score'
+        type: array
+      submission_point:
+        $ref: '#/definitions/model.SubmissionPoint'
+      submission_point_id:
+        example: 1
+        type: integer
+      updated_at:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/model.User'
+        description: 关联关系
+      user_id:
+        example: 1
+        type: integer
+    required:
+    - content
+    - problem_id
+    - submission_point_id
+    - user_id
+    type: object
+  model.SubmissionPoint:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      max_score:
+        example: 100
+        minimum: 1
+        type: integer
+      name:
+        example: 源代码提交
+        type: string
+      problem:
+        allOf:
+        - $ref: '#/definitions/model.Problem'
+        description: 关联关系
+      problem_id:
+        example: 1
+        type: integer
+      submissions:
+        items:
+          $ref: '#/definitions/model.Submission'
+        type: array
+      updated_at:
+        type: string
+    required:
+    - max_score
+    - name
+    - problem_id
+    type: object
+  model.User:
+    properties:
+      college:
+        example: 计算机学院
+        type: string
+      created_at:
+        type: string
+      email:
+        example: user@example.com
+        type: string
+      id:
+        type: integer
+      is_admin:
+        type: boolean
+      nickname:
+        example: 小明
+        type: string
+      qq:
+        example: "123456789"
+        type: string
+      real_name:
+        example: 张三
+        type: string
+      student_id:
+        example: "2021001001"
+        type: string
+      updated_at:
+        type: string
+      username:
+        example: user123
+        type: string
+    required:
+    - college
+    - nickname
+    - real_name
+    - student_id
+    - username
+    type: object
+  response.Response:
+    properties:
+      code:
+        example: 0
+        type: integer
+      data: {}
+      msg:
+        example: success
+        type: string
+    type: object
+  service.CreateDirectionRequest:
+    type: object
+  service.CreateProblemRequest:
+    properties:
+      description:
+        example: 使用HTML、CSS、JavaScript实现一个基本的计算器功能
+        type: string
+      direction_id:
+        example: 1
+        type: integer
+      title:
+        example: 实现一个简单的计算器
+        type: string
+    required:
+    - description
+    - direction_id
+    - title
+    type: object
+  service.CreateScoreRequest:
+    properties:
+      comment:
+        example: 代码实现良好，但缺少注释
+        type: string
+      score:
+        example: 85
+        minimum: 0
+        type: integer
+      submission_id:
+        example: 1
+        type: integer
+    required:
+    - score
+    - submission_id
+    type: object
+  service.CreateSubmissionPointRequest:
+    properties:
+      max_score:
+        example: 100
+        minimum: 1
+        type: integer
+      name:
+        example: 源代码提交
+        type: string
+    required:
+    - max_score
+    - name
+    type: object
+  service.CreateSubmissionRequest:
+    properties:
+      content:
+        example: https://github.com/user/project
+        type: string
+      problem_id:
+        example: 1
+        type: integer
+      submission_point_id:
+        example: 1
+        type: integer
+    required:
+    - content
+    - problem_id
+    - submission_point_id
+    type: object
+  service.LoginRequest:
+    properties:
+      password:
+        example: password123
+        type: string
+      username:
+        example: user123
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  service.LoginResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+    type: object
+  service.RankingItem:
+    properties:
+      nickname:
+        type: string
+      score:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  service.RegisterRequest:
+    properties:
+      college:
+        example: 计算机学院
+        type: string
+      email:
+        example: user@example.com
+        type: string
+      nickname:
+        example: 小明
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      qq:
+        example: "123456789"
+        type: string
+      real_name:
+        example: 张三
+        type: string
+      student_id:
+        example: "2021001001"
+        type: string
+      username:
+        example: user123
+        type: string
+    required:
+    - college
+    - nickname
+    - password
+    - real_name
+    - student_id
+    - username
+    type: object
+  service.SubmissionResponse:
+    properties:
+      content:
+        example: https://github.com/user/project
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      problem:
+        $ref: '#/definitions/model.Problem'
+      problem_id:
+        example: 1
+        type: integer
+      scores:
+        items:
+          $ref: '#/definitions/model.Score'
+        type: array
+      submission_point:
+        $ref: '#/definitions/model.SubmissionPoint'
+      submission_point_id:
+        example: 1
+        type: integer
+      total_score:
+        type: integer
+      updated_at:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/model.User'
+        description: 关联关系
+      user_id:
+        example: 1
+        type: integer
+    required:
+    - content
+    - problem_id
+    - submission_point_id
+    - user_id
+    type: object
+  service.UpdateDirectionRequest:
+    type: object
+  service.UpdateProblemRequest:
+    properties:
+      description:
+        example: 使用HTML、CSS、JavaScript实现一个基本的计算器功能
+        type: string
+      title:
+        example: 实现一个简单的计算器
+        type: string
+    type: object
+  service.UpdateScoreRequest:
+    properties:
+      comment:
+        example: 代码实现良好，但缺少注释
+        type: string
+      score:
+        example: 85
+        minimum: 0
+        type: integer
+    required:
+    - score
+    type: object
+  service.UpdateSubmissionPointRequest:
+    properties:
+      max_score:
+        example: 100
+        minimum: 1
+        type: integer
+      name:
+        example: 源代码提交
+        type: string
+    type: object
+  service.UpdateUserRequest:
+    properties:
+      college:
+        example: 计算机学院
+        type: string
+      email:
+        example: user@example.com
+        type: string
+      is_admin:
+        example: false
+        type: boolean
+      nickname:
+        example: 小明
+        type: string
+      qq:
+        example: "123456789"
+        type: string
+      real_name:
+        example: 张三
+        type: string
+      student_id:
+        example: "2021001001"
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: GlimGate工作室招新交题和评分系统API文档
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: GlimGate API
+  version: "1.0"
+paths:
+  /api/admin/directions:
+    post:
+      consumes:
+      - application/json
+      description: 管理员创建新的方向
+      parameters:
+      - description: 方向信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateDirectionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Direction'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建方向
+      tags:
+      - 方向管理
+  /api/admin/directions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 管理员删除方向
+      parameters:
+      - description: 方向ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 方向不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除方向
+      tags:
+      - 方向管理
+    put:
+      consumes:
+      - application/json
+      description: 管理员更新方向信息
+      parameters:
+      - description: 方向ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateDirectionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Direction'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 方向不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新方向
+      tags:
+      - 方向管理
+  /api/admin/problems:
+    post:
+      consumes:
+      - application/json
+      description: 管理员创建新的题目
+      parameters:
+      - description: 题目信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Problem'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建题目
+      tags:
+      - 题目管理
+  /api/admin/problems/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 管理员删除题目
+      parameters:
+      - description: 题目ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 题目不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除题目
+      tags:
+      - 题目管理
+    put:
+      consumes:
+      - application/json
+      description: 管理员更新题目信息
+      parameters:
+      - description: 题目ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Problem'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 题目不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新题目
+      tags:
+      - 题目管理
+  /api/admin/problems/{id}/submission-points:
+    post:
+      consumes:
+      - application/json
+      description: 管理员为题目创建提交点
+      parameters:
+      - description: 题目ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 提交点信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateSubmissionPointRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SubmissionPoint'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 题目不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建提交点
+      tags:
+      - 题目管理
+  /api/admin/scores:
+    post:
+      consumes:
+      - application/json
+      description: 管理员对提交进行评分
+      parameters:
+      - description: 评分信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateScoreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 评分成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Score'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建评分
+      tags:
+      - 评分管理
+  /api/admin/scores/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 管理员删除评分
+      parameters:
+      - description: 评分ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 评分不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除评分
+      tags:
+      - 评分管理
+    put:
+      consumes:
+      - application/json
+      description: 管理员更新评分信息
+      parameters:
+      - description: 评分ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateScoreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Score'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 评分不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新评分
+      tags:
+      - 评分管理
+  /api/admin/scores/my:
+    get:
+      consumes:
+      - application/json
+      description: 管理员获取自己的评分记录
+      parameters:
+      - description: 题目ID
+        in: query
+        name: problem_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Score'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取评分者的评分列表
+      tags:
+      - 评分管理
+  /api/admin/submission-points/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 管理员删除提交点
+      parameters:
+      - description: 提交点ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除提交点
+      tags:
+      - 题目管理
+    put:
+      consumes:
+      - application/json
+      description: 管理员更新提交点信息
+      parameters:
+      - description: 提交点ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateSubmissionPointRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SubmissionPoint'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 提交点不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新提交点
+      tags:
+      - 题目管理
+  /api/admin/submissions/review:
+    get:
+      consumes:
+      - application/json
+      description: 管理员获取需要评分的提交列表
+      parameters:
+      - description: 题目ID
+        in: query
+        name: problem_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Submission'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取待评分的提交列表
+      tags:
+      - 提交管理
+  /api/admin/users:
+    get:
+      consumes:
+      - application/json
+      description: 管理员获取用户列表
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户列表
+      tags:
+      - 用户管理
+  /api/admin/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 管理员删除用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      description: 管理员获取指定用户的详细信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定用户信息
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      description: 管理员更新用户信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户信息
+      tags:
+      - 用户管理
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录接口
+      parameters:
+      - description: 登录信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登录成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/service.LoginResponse'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 用户登录
+      tags:
+      - 用户管理
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册接口
+      parameters:
+      - description: 注册信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 注册成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 用户注册
+      tags:
+      - 用户管理
+  /api/directions:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有方向的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Direction'
+                  type: array
+              type: object
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取方向列表
+      tags:
+      - 方向管理
+  /api/directions/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取方向的详细信息
+      parameters:
+      - description: 方向ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Direction'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 方向不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取方向详情
+      tags:
+      - 方向管理
+  /api/problems:
+    get:
+      consumes:
+      - application/json
+      description: 获取题目列表，可按方向筛选
+      parameters:
+      - description: 方向ID
+        in: query
+        name: direction_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Problem'
+                  type: array
+              type: object
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取题目列表
+      tags:
+      - 题目管理
+  /api/problems/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取题目的详细信息
+      parameters:
+      - description: 题目ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Problem'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 题目不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取题目详情
+      tags:
+      - 题目管理
+  /api/problems/{id}/submission-points:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定题目的提交点列表
+      parameters:
+      - description: 题目ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.SubmissionPoint'
+                  type: array
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取提交点列表
+      tags:
+      - 题目管理
+  /api/ranking:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定方向的排行榜
+      parameters:
+      - description: 方向ID
+        in: query
+        name: direction_id
+        type: integer
+      - default: 10
+        description: 限制数量
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/service.RankingItem'
+                  type: array
+              type: object
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取排行榜
+      tags:
+      - 评分管理
+  /api/scores/my:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前用户的评分记录
+      parameters:
+      - description: 题目ID
+        in: query
+        name: problem_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Score'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取我的评分列表
+      tags:
+      - 评分管理
+  /api/submissions:
+    post:
+      consumes:
+      - application/json
+      description: 用户提交作业
+      parameters:
+      - description: 提交信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateSubmissionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 提交成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Submission'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建提交
+      tags:
+      - 提交管理
+  /api/submissions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 用户删除自己的提交
+      parameters:
+      - description: 提交ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 提交不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除提交
+      tags:
+      - 提交管理
+    get:
+      consumes:
+      - application/json
+      description: 获取指定提交的详细信息
+      parameters:
+      - description: 提交ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Submission'
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 提交不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取提交详情
+      tags:
+      - 提交管理
+  /api/submissions/{id}/scores:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定提交的所有评分
+      parameters:
+      - description: 提交ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Score'
+                  type: array
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取提交的评分列表
+      tags:
+      - 评分管理
+  /api/submissions/my:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前用户的提交列表
+      parameters:
+      - description: 题目ID
+        in: query
+        name: problem_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/service.SubmissionResponse'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取我的提交列表
+      tags:
+      - 提交管理
+  /api/user/profile:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前登录用户的信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 用户管理
+  /api/users/{id}/scores:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的评分记录
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 题目ID
+        in: query
+        name: problem_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Score'
+                  type: array
+              type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: 未授权
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户的评分列表
+      tags:
+      - 评分管理
+securityDefinitions:
+  ApiKeyAuth:
+    description: Bearer token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

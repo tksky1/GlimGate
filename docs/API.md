@@ -6,7 +6,7 @@ GlimGate是一个工作室招新交题和评分系统，提供完整的用户管
 
 ## 基础信息
 
-- **Base URL**: `http://localhost:8080`
+- **Base URL**: `http://localhost:20401`
 - **API版本**: v1
 - **认证方式**: Bearer Token (JWT)
 
@@ -323,7 +323,7 @@ Authorization: Bearer <your_jwt_token>
 
 ```bash
 # 1. 用户注册
-curl -X POST http://localhost:8080/api/auth/register \
+curl -X POST http://localhost:20401/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
@@ -335,7 +335,7 @@ curl -X POST http://localhost:8080/api/auth/register \
   }'
 
 # 2. 用户登录
-curl -X POST http://localhost:8080/api/auth/login \
+curl -X POST http://localhost:20401/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
@@ -343,7 +343,7 @@ curl -X POST http://localhost:8080/api/auth/login \
   }'
 
 # 3. 使用返回的token访问需要认证的接口
-curl -X GET http://localhost:8080/api/user/profile \
+curl -X GET http://localhost:20401/api/user/profile \
   -H "Authorization: Bearer <your_jwt_token>"
 ```
 
@@ -351,13 +351,13 @@ curl -X GET http://localhost:8080/api/user/profile \
 
 ```bash
 # 1. 获取题目列表
-curl -X GET http://localhost:8080/api/problems
+curl -X GET http://localhost:20401/api/problems
 
 # 2. 获取题目详情和提交点
-curl -X GET http://localhost:8080/api/problems/1
+curl -X GET http://localhost:20401/api/problems/1
 
 # 3. 提交作业
-curl -X POST http://localhost:8080/api/submissions \
+curl -X POST http://localhost:20401/api/submissions \
   -H "Authorization: Bearer <your_jwt_token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -367,7 +367,7 @@ curl -X POST http://localhost:8080/api/submissions \
   }'
 
 # 4. 查看我的提交
-curl -X GET http://localhost:8080/api/submissions/my \
+curl -X GET http://localhost:20401/api/submissions/my \
   -H "Authorization: Bearer <your_jwt_token>"
 ```
 
@@ -375,11 +375,11 @@ curl -X GET http://localhost:8080/api/submissions/my \
 
 ```bash
 # 1. 获取待评分的提交
-curl -X GET http://localhost:8080/api/admin/submissions/review \
+curl -X GET http://localhost:20401/api/admin/submissions/review \
   -H "Authorization: Bearer <admin_jwt_token>"
 
 # 2. 对提交进行评分
-curl -X POST http://localhost:8080/api/admin/scores \
+curl -X POST http://localhost:20401/api/admin/scores \
   -H "Authorization: Bearer <admin_jwt_token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -389,7 +389,7 @@ curl -X POST http://localhost:8080/api/admin/scores \
   }'
 
 # 3. 查看评分记录
-curl -X GET http://localhost:8080/api/admin/scores/my \
+curl -X GET http://localhost:20401/api/admin/scores/my \
   -H "Authorization: Bearer <admin_jwt_token>"
 ```
 
@@ -398,7 +398,7 @@ curl -X GET http://localhost:8080/api/admin/scores/my \
 1. 配置数据库连接信息在 `config/config.yaml`
 2. 运行 `make deps` 安装依赖
 3. 运行 `make run` 启动服务
-4. 访问 `http://localhost:8080/swagger/index.html` 查看完整的API文档
+4. 访问 `http://localhost:20401/swagger/index.html` 查看完整的API文档
 
 ## 注意事项
 
