@@ -3,8 +3,8 @@ server:
   mode: debug # debug, release, test
 
 database:
-  host: glimgate-mysql
-  port: 3306
+  host: 127.0.0.1
+  port: 23306
   username: root
   password: root123
   dbname: glimgate

@@ -5,41 +5,35 @@ services:
     image: mysql:8.0
     container_name: glimgate-mysql
     restart: always
+    network_mode: host
     environment:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: glimgate
       MYSQL_USER: glimgate
       MYSQL_PASSWORD: glimgate123
     ports:
-      - "23306:3306"
+      - "23306:23306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mysql/config:/etc/mysql/conf.d
+      - ./deploy/mysql_cfg:/etc/mysql/conf.d
     command: --default-authentication-plugin=mysql_native_password
-    networks:
-      - glimgate-network
 
   # GlimGate应用
   glimgate-app:
     build: .
     container_name: glimgate-app
     restart: always
+    network_mode: host
     ports:
-      - "0.0.0.0:20401:20401"
+      - "20401:20401"
     depends_on:
       - glimgate-mysql
     environment:
       - GIN_MODE=release
     volumes:
       - ./config:/root/config
-    networks:
-      - glimgate-network
 
 volumes:
   mysql_data:
     driver: local
-
-networks:
-  glimgate-network:
-    driver: bridge

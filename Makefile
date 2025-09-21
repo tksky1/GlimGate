@@ -1,7 +1,7 @@
 .PHONY: build run clean test deps swagger
 
 # 构建项目
-build:
+build-go:
 	go build -o bin/glimgate main.go
 
 # 运行项目
@@ -40,7 +40,7 @@ lint:
 # 初始化项目
 init: deps swagger
 
-build-compose:
+build:
 	docker compose build
 
 up:
@@ -52,6 +52,8 @@ deploy:  swagger build-compose up
 down:
 	docker compose down
 
+restart: build down up
+	@echo "重启完成"
 # 帮助信息
 help:
 	@echo "可用的命令:"
